@@ -210,3 +210,4 @@ C:\Users\oguer\Documents\GitHub\StarDrifter\obj\Debug\Assembly-CSharp.csproj.Cor
 C:\Users\oguer\Documents\GitHub\StarDrifter\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 C:\Users\oguer\Documents\GitHub\StarDrifter\obj\Debug\Assembly-CSharp.dll
 C:\Users\oguer\Documents\GitHub\StarDrifter\obj\Debug\Assembly-CSharp.pdb
+C:\Users\oguer\Documents\GitHub\StarDrifter\Temp\bin\Debug\Substance.Game.dll

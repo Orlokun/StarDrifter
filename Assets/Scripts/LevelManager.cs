@@ -1,0 +1,55 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class LevelManager : MonoBehaviour
+{
+    private static int difficulty = 2;
+    private static bool canDrive;
+    private static UIController uiController = FindObjectOfType<UIController>();
+    private static Timer initialTimer; 
+
+    public static void SetDifficulty(int incomingDif)
+    {
+        difficulty = incomingDif;
+    }
+
+    public static int GetDifficulty()
+    {
+        return difficulty;
+    }
+
+    public static void StartGame()
+    {
+        SetCanDrive(true);
+        uiController.UiElementSwitch("initialTimer", false);
+        uiController.UiElementSwitch("runTimer", true);
+    }
+
+    public static void SetCanDrive(bool _canDrive)
+    {
+        canDrive = _canDrive;
+    }
+
+    public static bool CanDrive()
+    {
+        return canDrive;
+    }
+
+    public static IEnumerator TurnInitialTimerOn()
+    {
+        yield return new WaitForSeconds(2);
+
+        initialTimer.SetCanCount(true);
+    }
+
+    public static void SetInitialTimer(Timer _timer)
+    {
+        initialTimer = _timer;
+    }
+
+    public static void ResetFromLastCheckPoint(GameObject _object)
+    {
+        // Set Reiniciate()
+    }
+}
