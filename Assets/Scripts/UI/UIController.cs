@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UIController : MonoBehaviour
 {
@@ -9,9 +10,14 @@ public class UIController : MonoBehaviour
 
     [SerializeField] GameObject runTimer;
     [SerializeField] GameObject initialTimer;
+    [SerializeField] TextMeshProUGUI lapCounter; 
+
+    Timer rTimer;
+    Timer inTimer;
 
     void Start()
     {
+        DefineTimers();
         SetStartConditions();
     }
 
@@ -19,6 +25,7 @@ public class UIController : MonoBehaviour
     {
         UiElementSwitch(rTimerName, false);
         UiElementSwitch(iTimer, true);
+        SetLapCounter(0);
     }
 
     public void UiElementSwitch(string elementName, bool turnOn)
@@ -34,6 +41,15 @@ public class UIController : MonoBehaviour
         }
     }
 
+    #region LapCounter
+    public void SetLapCounter(int lapNumber)
+    {
+        lapCounter.text = lapNumber.ToString();
+    }
+
+    #endregion
+
+    #region Timers
     void SetRunTimerOnOff(bool turnOn)
     {
         runTimer.SetActive(turnOn);
@@ -48,5 +64,29 @@ public class UIController : MonoBehaviour
         initialTimer.SetActive(turnOn);
     }
 
+    public Timer GetTimer(string neededTimer)
+    {
+        switch(neededTimer)
+        {
+            case "runTimer":
+                return rTimer;
+            case "initialTimer":
+                return inTimer;
+            default:
+                return null;
+        }
+    }
 
+    private void DefineTimers()
+    {
+        if (runTimer != null)
+        {
+            rTimer = runTimer.GetComponent<Timer>();
+        }
+        if (initialTimer != null)
+        {
+            inTimer = initialTimer.GetComponent<Timer>();
+        }
+    }
+    #endregion
 }

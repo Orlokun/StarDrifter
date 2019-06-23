@@ -7,21 +7,40 @@ public class TrackSection : MonoBehaviour
     [SerializeField] int sectionId;
     public MeteorTargetKeeper targetKeeper;
     private RaceTrackHandler rtHandler;
-    private HealthManager hManager; 
 
     void Start()
     {
         targetKeeper = transform.GetComponentInChildren<MeteorTargetKeeper>();
+        targetKeeper.id = sectionId;
         rtHandler = FindObjectOfType<RaceTrackHandler>();
-        hManager = FindObjectOfType<HealthManager>();
+        SetStreetsId(sectionId);
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.GetComponent<CarController>())
         {
-            rtHandler.SetACtiveSection(sectionId);
-            hManager.ChangeHP(other.gameObject, 25);
+            rtHandler.SetSectionActive(sectionId);
+            rtHandler.SetPlayerCheckpointPosition(other.transform.position);
+        }
+    }
+
+    public int GetSectionId()
+    {
+        return sectionId;
+    }
+
+    private void SetStreetsId(int id)
+    {
+        foreach (Transform children in transform)
+        {
+            if(children.gameObject.layer == 9)
+            {
+                children.gameObject.AddComponent<TrackPartsIdHolder>();
+                TrackPartsIdHolder childrenIdHolder = children.GetComponent<TrackPartsIdHolder>();
+                childrenIdHolder.SetId(id);
+            }
         }
     }
 

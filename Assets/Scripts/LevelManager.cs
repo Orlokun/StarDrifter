@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
     private static int difficulty = 2;
     private static bool canDrive;
     private static UIController uiController = FindObjectOfType<UIController>();
+    private static RaceTrackHandler trackHandler = FindObjectOfType<RaceTrackHandler>();
     private static Timer initialTimer; 
 
     public static void SetDifficulty(int incomingDif)
@@ -50,6 +51,18 @@ public class LevelManager : MonoBehaviour
 
     public static void ResetFromLastCheckPoint(GameObject _object)
     {
-        // Set Reiniciate()
+        _object.transform.position = trackHandler.CheckpointPosition();
+    }
+
+    public static void ChangeTimer(float timeLap)
+    {
+        Timer rTimer = uiController.GetTimer("runTimer");
+        rTimer.ChangeTimer(timeLap);
+    }
+
+    public static void SetNewLap(int numberOfLaps)
+    {
+        trackHandler.ResetItemsInLap();
+        uiController.SetLapCounter(numberOfLaps);
     }
 }

@@ -1,0 +1,249 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MeteorAdmin : MonoBehaviour
+{
+    RaceTrackHandler rHandler;
+    AsteroidController[] asteroids;
+    Vector3[] initialAsteroidPositions;
+
+    int difficulty;
+    int asteroidFreq = 5;
+    public int asteroidLifeSpan;
+    public int damage = 15;
+
+    private Vector3 actualTarget;
+    int activeSection;
+    bool isActive = false;
+    private float damageRatio;
+
+    private void Start()
+    {
+        rHandler = FindObjectOfType<RaceTrackHandler>();
+        asteroids = FindObjectsOfType<AsteroidController>();
+        activeSection = 0;
+        GiveAsteroidsIdAndLifeSpan();
+        GetAsteroidsPlaceHoldersPosition();
+        SetDamageRatio();
+        ToggleAllAsteroids(false);
+        StartCoroutine(TurnAsteroidThrowerOn());
+    }
+
+    private void Update()
+    {
+        if (isActive)
+        {
+            StartCoroutine(SendAsteroids());
+        }
+    }
+
+    private void GetAsteroidsPlaceHoldersPosition()
+    {
+        AsteroidsPlaceHolder[] placeHolders = FindObjectsOfType<AsteroidsPlaceHolder>();
+        initialAsteroidPositions = new Vector3[placeHolders.Length];
+        foreach (AsteroidsPlaceHolder aHolder in placeHolders)
+        {
+            initialAsteroidPositions[aHolder.id] = aHolder.transform.position;
+        }
+    }
+
+    public int GetActiveTrackSection()
+    {
+        return rHandler.GetActiveSection();
+    }
+
+    private IEnumerator TurnAsteroidThrowerOn()
+    {
+        yield return new WaitForSeconds(5);
+        isActive = true;
+    }
+
+    private IEnumerator SendAsteroids()
+    {
+        for (int i = 0; i < asteroids.Length; i++)
+        {
+            yield return new WaitForSeconds(asteroidFreq);
+
+            AsteroidController aController = asteroids[i];
+            if (!aController.gameObject.activeInHierarchy && aController.isAvailable)
+            {
+                SetLaunchValues();
+                SendAsteroid(actualTarget, asteroids[i]);
+            }
+        }
+    }
+
+    void SetLaunchValues()
+    {
+        activeSection = GetActiveTrackSection();
+        actualTarget = GetTargetFromSection(activeSection);
+    }
+
+    Vector3 GetTargetFromSection(int sectionId)
+    {
+        MeteorTargetKeeper targetKeeper = GetMyTargetKeeper(sectionId);
+        Vector3 myTarget = targetKeeper.GiveMeATarget();
+        Debug.Log("Asteroids target is: " + myTarget);
+        return myTarget;
+    }
+
+    MeteorTargetKeeper GetMyTargetKeeper(int sectionId)
+    {
+        TrackSection[] tracks = FindObjectsOfType<TrackSection>();
+        for (int i = 0; i < tracks.Length; i++)
+        {
+            if (tracks[i].GetSectionId() == activeSection)
+            {
+                if (tracks[i].targetKeeper != null)
+                {
+                    return tracks[i].targetKeeper;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void SendAsteroid(Vector3 targetPosition, AsteroidController aController)
+    {
+        aController.gameObject.SetActive(true);
+        aController.StartLaunch(targetPosition);
+    }
+
+    void ToggleAllAsteroids(bool isActive)
+    {
+        for (int i = 0; i < asteroids.Length; i++)
+        {
+            GameObject mAsteroid = asteroids[i].gameObject;
+            if (mAsteroid)
+            {
+                mAsteroid.SetActive(isActive);
+            }
+        }
+    }
+
+    void GiveAsteroidsIdAndLifeSpan()
+    {
+        for (int i = 0; i < asteroids.Length; i++)
+        {
+            AsteroidController aController = asteroids[i];
+            if (aController)
+            {
+                aController.SetID(i);
+                aController.SetLifeSpan(asteroidLifeSpan);
+                aController.SetDamage(damage);
+            }
+        }
+    }
+
+    void ToggleAsteroid(int id, bool _active)
+    {
+        for (int i = 0; i < asteroids.Length; i++)
+        {
+            AsteroidController asteroid = asteroids[i];
+            if (asteroid)
+            {
+                if(asteroid.GetId() == id)
+                {
+                    asteroid.gameObject.SetActive(_active);
+                }
+            }
+
+        }
+    }
+
+    public AsteroidController GetAsteroidById(int id)
+    {
+        for (int i = 0; i < asteroids.Length; i++)
+        {
+            AsteroidController aController = asteroids[i];
+            if (aController.GetId() == id)
+            {
+                return aController;
+            }
+        }
+        return null;
+    }
+
+    public void TurnAsteroidAvailableForNewLaunch(int id)
+    {
+        ToggleAsteroid(id, false);
+        ReturnAsteroidToSectionPosition(id);
+        GiveAsteroidNewTarget(id);
+        StartCoroutine(MakeAsteroidAvailableAgain(id));
+    }
+
+    private void SetDamageRatio()
+    {
+        switch (LevelManager.GetDifficulty())
+        {
+            case 0:
+                damageRatio = .3f;
+                break;
+            case 1:
+                damageRatio = 1f;
+                break;
+            case 2:
+                damageRatio = 5f;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void ReturnAsteroidToSectionPosition(int astroId)
+    {
+        Vector3 initialPosition = initialAsteroidPositions[rHandler.GetActiveSection()];
+        Debug.Log("Returning Asteroid " + astroId + " to position: " + initialPosition);
+        for (int i = 0; i< asteroids.Length; i++)
+        {
+            AsteroidController aController = asteroids[i];
+            if (aController)
+            {
+                if(aController.GetId() == astroId)
+                {
+                    aController.transform.position = initialPosition;
+                }
+            }
+        }
+    }
+
+    void GiveAsteroidNewTarget(int id)
+    {
+        for (int i = 0; i < asteroids.Length; i++)
+        {
+            AsteroidController aController = asteroids[i];
+            if (aController)
+            {
+                if (aController.GetId() == id)
+                {
+                    SetLaunchValues();
+                    aController.AssignNewTarget(actualTarget);
+                }
+            }
+        }
+    }
+
+    private IEnumerator MakeAsteroidAvailableAgain(int id)
+    {
+        yield return new WaitForSeconds(2);
+        for (int i = 0; i < asteroids.Length; i++)
+        {
+            AsteroidController aController = asteroids[i];
+            if(aController)
+            {
+                if (aController.GetId() == id)
+                {
+                    aController.SetAvailableAgain();
+
+                }
+            }
+        }
+    }
+
+    public float GetRatio()
+    {
+        return damageRatio;
+    }
+
+}

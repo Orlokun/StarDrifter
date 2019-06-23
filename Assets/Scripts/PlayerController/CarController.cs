@@ -8,6 +8,8 @@ public class CarController : MonoBehaviour
     private Vector3 wasdController;
     private Rigidbody rBody;
     public float centerOfMassY;
+    private bool hitState;
+
 
 
     public WheelCollider[] frontWheels = new WheelCollider[2];
@@ -27,12 +29,12 @@ public class CarController : MonoBehaviour
     private float motorForce;
     public float topSpeed;
 
+
     private void Awake()
     {
         iController = FindObjectOfType<InputController>();
         rBody = GetComponent<Rigidbody>();
         rBody.centerOfMass = new Vector3(rBody.centerOfMass.x, centerOfMassY, rBody.centerOfMass.z);
-        StartCoroutine(LevelManager.TurnInitialTimerOn());
     }
 
     private void FixedUpdate()
@@ -77,6 +79,7 @@ public class CarController : MonoBehaviour
         UpdatePairOfWheels(frontWheels, frontWheelsT);
         UpdatePairOfWheels(rearWheels, rearWheelsT);
     }
+
     private void UpdatePairOfWheels(WheelCollider[] wColliders, Transform[] wTransforms)
     {
         for (int i = 0; i < wColliders.Length; i++)
@@ -84,6 +87,7 @@ public class CarController : MonoBehaviour
             UpdateWheelPose(wColliders[i], wTransforms[i]);
         }
     }
+
     void UpdateWheelPose(WheelCollider wCollider, Transform _transform)
     {
         Vector3 position = _transform.position;
@@ -92,6 +96,16 @@ public class CarController : MonoBehaviour
         wCollider.GetWorldPose(out position, out myQuaternion);
         _transform.position = position;
         _transform.rotation = myQuaternion;
+    }
+
+    public void SetHit(bool _setHit)
+    {
+        hitState = _setHit;
+    }
+
+    public bool GetHitState()
+    {
+        return hitState;
     }
 
 }

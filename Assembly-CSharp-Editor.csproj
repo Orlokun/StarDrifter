@@ -68,6 +68,7 @@
     <Compile Include="Assets\Allegorithmic\Plugins\Substance\Livelink\Editor\Scripts\MaterialsManipulation.cs" />
     <Compile Include="Assets\Allegorithmic\Plugins\Substance\Livelink\Editor\Scripts\MeshLinkEditor.cs" />
     <Compile Include="Assets\Allegorithmic\Plugins\Substance\Livelink\Editor\Scripts\ShadersInfos.cs" />
+    <Compile Include="Assets\JMO Assets\Cartoon FX Easy Editor\Editor\CFXEasyEditor.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/oguer/Documents/GitHub/StarDrifter/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
@@ -331,6 +332,9 @@
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>C:/Users/oguer/Documents/GitHub/StarDrifter/Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
+    </Reference>
+    <Reference Include="JMOAssets_CartoonFXFreeWelcome">
+      <HintPath>C:/Users/oguer/Documents/GitHub/StarDrifter/Assets/JMO Assets/Editor/JMOAssets_CartoonFXFreeWelcome.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.1f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

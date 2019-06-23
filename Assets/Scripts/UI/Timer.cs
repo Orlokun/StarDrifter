@@ -24,7 +24,7 @@ public class Timer : MonoBehaviour
     {
         switch (tType)
         {
-            case TimerType.InitialTimer:
+            case TimerType.InitialTimer:                //Le mando el timer inicial al level manager para 
                 LevelManager.SetInitialTimer(this);
                 break;
             case TimerType.RunTimer:
@@ -42,7 +42,7 @@ public class Timer : MonoBehaviour
         CheckTimerColor();
     }
 
-    private void Update()
+    private void Update()                   // Timer debe ser o inicial o de carrera. 
     {
         switch (tType)
         {

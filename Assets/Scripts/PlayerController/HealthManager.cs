@@ -9,6 +9,7 @@ public class HealthManager : MonoBehaviour
     private int playerHealth;
     private int difficulty;
 
+    
     private void Awake()
     {
         hBar = FindObjectOfType<HealthBar>();
@@ -26,7 +27,7 @@ public class HealthManager : MonoBehaviour
     {
         switch (objectType)
         {
-            case "Meteor":
+            case "Asteroid":
                 return meteorHealth;
             case "Player":
                 return playerHealth;
@@ -73,7 +74,7 @@ public class HealthManager : MonoBehaviour
 
     public void ChangeHP(GameObject dReceiver, int deltaDamage)
     {
-        if (dReceiver.GetComponent<CarController>() || dReceiver.GetComponent<EnemyController>())
+        if (dReceiver.GetComponent<CarController>() || dReceiver.GetComponent<AsteroidController>())
         {
             hBar.TakeHit(deltaDamage);
         }

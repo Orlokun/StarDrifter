@@ -15,11 +15,11 @@ public class HealthBar : MonoBehaviour
     private void Awake()
     {
         hManager = FindObjectOfType<HealthManager>();
-        maxHealth = hManager.AssignStartHealth(gameObject.tag);
     }   
 
     void Start()
     {
+        maxHealth = hManager.AssignStartHealth(gameObject.tag);
         currentHealth = maxHealth;
         slider.value = hManager.CalculateHealthBar(currentHealth, maxHealth);
     }
