@@ -7,6 +7,7 @@ public class MeteorAdmin : MonoBehaviour
     RaceTrackHandler rHandler;
     AsteroidController[] asteroids;
     Vector3[] initialAsteroidPositions;
+    AsteroidPromptParticle[] alertParticles;
 
     int difficulty;
     int asteroidFreq = 5;
@@ -22,8 +23,8 @@ public class MeteorAdmin : MonoBehaviour
     {
         rHandler = FindObjectOfType<RaceTrackHandler>();
         asteroids = FindObjectsOfType<AsteroidController>();
-        activeSection = 0;
-        GiveAsteroidsIdAndLifeSpan();
+        alertParticles = FindObjectsOfType<AsteroidPromptParticle>();
+        SetAsteroidParameters();
         GetAsteroidsPlaceHoldersPosition();
         SetDamageRatio();
         ToggleAllAsteroids(false);
@@ -44,7 +45,8 @@ public class MeteorAdmin : MonoBehaviour
         initialAsteroidPositions = new Vector3[placeHolders.Length];
         foreach (AsteroidsPlaceHolder aHolder in placeHolders)
         {
-            initialAsteroidPositions[aHolder.id] = aHolder.transform.position;
+            int indexPosition = aHolder.id;
+            initialAsteroidPositions[indexPosition] = aHolder.transform.position;
         }
     }
 
@@ -107,8 +109,10 @@ public class MeteorAdmin : MonoBehaviour
     private void SendAsteroid(Vector3 targetPosition, AsteroidController aController)
     {
         aController.gameObject.SetActive(true);
+        aController.SetParticleInPosition(targetPosition);
         aController.StartLaunch(targetPosition);
     }
+
 
     void ToggleAllAsteroids(bool isActive)
     {
@@ -122,18 +126,39 @@ public class MeteorAdmin : MonoBehaviour
         }
     }
 
-    void GiveAsteroidsIdAndLifeSpan()
+    void SetAsteroidParameters()
     {
         for (int i = 0; i < asteroids.Length; i++)
         {
             AsteroidController aController = asteroids[i];
             if (aController)
             {
+                SetParticleIdAndAsteroid(aController, i);
                 aController.SetID(i);
                 aController.SetLifeSpan(asteroidLifeSpan);
                 aController.SetDamage(damage);
             }
         }
+    }
+
+    void SetParticleIdAndAsteroid(AsteroidController aController, int id)
+    {
+        AsteroidPromptParticle particle = GetParticleController(id);
+        if (particle)
+        {
+            particle.SetId(id);
+            aController.SetParticleSystemObject(particle.gameObject);
+            particle.gameObject.SetActive(false);
+        }
+    }
+
+    AsteroidPromptParticle GetParticleController(int id)
+    {
+        if (alertParticles[id] != null)
+        {
+            return alertParticles[id];
+        }
+        return null;
     }
 
     void ToggleAsteroid(int id, bool _active)
@@ -143,7 +168,7 @@ public class MeteorAdmin : MonoBehaviour
             AsteroidController asteroid = asteroids[i];
             if (asteroid)
             {
-                if(asteroid.GetId() == id)
+                if (asteroid.GetId() == id)
                 {
                     asteroid.gameObject.SetActive(_active);
                 }
@@ -168,10 +193,27 @@ public class MeteorAdmin : MonoBehaviour
     public void TurnAsteroidAvailableForNewLaunch(int id)
     {
         ToggleAsteroid(id, false);
+        //ToggleParticle(id, false);
         ReturnAsteroidToSectionPosition(id);
         GiveAsteroidNewTarget(id);
         StartCoroutine(MakeAsteroidAvailableAgain(id));
     }
+
+    /*private void ToggleParticle(int id, bool isActive)
+    {
+        for (int i = 0; i < alertParticles.Length; i++)
+        {
+            AsteroidPromptParticle aParticle = alertParticles[i];
+            if (aParticle)
+            {
+                if (aParticle.GetId() == id)
+                {
+                    aParticle.gameObject.SetActive(isActive);
+                }
+            }
+
+        }
+    }*/
 
     private void SetDamageRatio()
     {
@@ -235,7 +277,6 @@ public class MeteorAdmin : MonoBehaviour
                 if (aController.GetId() == id)
                 {
                     aController.SetAvailableAgain();
-
                 }
             }
         }

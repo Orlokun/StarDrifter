@@ -4,7 +4,6 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(HealthBar))]
 
 public class AsteroidController : MonoBehaviour
 {
@@ -18,6 +17,7 @@ public class AsteroidController : MonoBehaviour
     private HealthManager hManager;
     private HealthBar healthBar;
     private HitAdmin hAdmin;
+    private GameObject pSystem;
 
     public bool isAvailable;
     private int asteroId;
@@ -66,6 +66,7 @@ public class AsteroidController : MonoBehaviour
         {
             actualLife = 0;
             canMove = false;
+            ToggleParticle(false);
             mAdmin.TurnAsteroidAvailableForNewLaunch(asteroId);
         }
     }
@@ -79,6 +80,7 @@ public class AsteroidController : MonoBehaviour
             {
                 CheckIfDamageIsDone();
                 canMove = false;
+                ToggleParticle(false);
                 mAdmin.TurnAsteroidAvailableForNewLaunch(asteroId);
             }
 
@@ -106,6 +108,17 @@ public class AsteroidController : MonoBehaviour
         target = _target;
         canMove = true;
         isAvailable = false;
+        ToggleParticle(true);
+    }
+
+    public void SetParticleInPosition(Vector3 pTarget)
+    {
+        pSystem.transform.position = pTarget;
+    }
+
+    private void ToggleParticle(bool isActive)
+    {
+        pSystem.SetActive(isActive);
     }
 
     public void SetID(int id)
@@ -131,11 +144,22 @@ public class AsteroidController : MonoBehaviour
     public void AssignNewTarget(Vector3 newTarget)
     {
         target = newTarget;
+        SetParticleToNewTarget(target);
+    }
+
+    private void SetParticleToNewTarget(Vector3 nTarget)
+    {
+        pSystem.transform.position = nTarget;
     }
 
     public void SetDamage(int _damage)
     {
         damage = _damage;
+    }
+
+    public void SetParticleSystemObject(GameObject _pSystem)
+    {
+        pSystem = _pSystem;
     }
 
     private void CheckIfDamageIsDone()

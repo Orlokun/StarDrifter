@@ -28,8 +28,10 @@ public class HitAdmin : MonoBehaviour
 
     private IEnumerator TurnPlayeravailable(CarController player)
     {
-        yield return new WaitForSeconds(3);
         player.SetHit(true);
+        yield return new WaitForSeconds(3);
+
+        player.SetHit(false);
     }
 
     private void TakeHit(GameObject player, int damage)
