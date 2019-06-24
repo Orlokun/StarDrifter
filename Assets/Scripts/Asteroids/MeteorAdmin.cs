@@ -10,9 +10,12 @@ public class MeteorAdmin : MonoBehaviour
     AsteroidPromptParticle[] alertParticles;
 
     int difficulty;
-    int asteroidFreq = 5;
+    [SerializeField] int asteroidsFreq;
+    int delayTime;
+    int asteroidIndex;
     public int asteroidLifeSpan;
     public int damage = 15;
+    public float travelTime;
 
     private Vector3 actualTarget;
     int activeSection;
@@ -35,7 +38,21 @@ public class MeteorAdmin : MonoBehaviour
     {
         if (isActive)
         {
-            StartCoroutine(SendAsteroids());
+            SecureFrequency();
+            delayTime++;
+            if (delayTime >= asteroidsFreq)
+            {
+                SendNewAsteroid();
+                delayTime = 0;
+            }
+        }
+    }
+
+    private void SecureFrequency()
+    {
+        if (asteroidsFreq < 30)
+        {
+            asteroidsFreq = 30;
         }
     }
 
@@ -61,20 +78,21 @@ public class MeteorAdmin : MonoBehaviour
         isActive = true;
     }
 
-    private IEnumerator SendAsteroids()
+    private void SendNewAsteroid()
     {
-        for (int i = 0; i < asteroids.Length; i++)
+        AsteroidController aController = asteroids[asteroidIndex];
+        if (!aController.gameObject.activeInHierarchy && aController.isAvailable)
         {
-            yield return new WaitForSeconds(asteroidFreq);
-
-            AsteroidController aController = asteroids[i];
-            if (!aController.gameObject.activeInHierarchy && aController.isAvailable)
+            SetLaunchValues();
+            LaunchAsteroid(actualTarget, asteroids[asteroidIndex]);
+            asteroidIndex++;
+            if (asteroidIndex >= asteroids.Length)
             {
-                SetLaunchValues();
-                SendAsteroid(actualTarget, asteroids[i]);
+                asteroidIndex = 0;
             }
         }
     }
+
 
     void SetLaunchValues()
     {
@@ -82,7 +100,7 @@ public class MeteorAdmin : MonoBehaviour
         actualTarget = GetTargetFromSection(activeSection);
     }
 
-    Vector3 GetTargetFromSection(int sectionId)
+    public Vector3 GetTargetFromSection(int sectionId)
     {
         MeteorTargetKeeper targetKeeper = GetMyTargetKeeper(sectionId);
         Vector3 myTarget = targetKeeper.GiveMeATarget();
@@ -106,9 +124,10 @@ public class MeteorAdmin : MonoBehaviour
         return null;
     }
 
-    private void SendAsteroid(Vector3 targetPosition, AsteroidController aController)
+    private void LaunchAsteroid(Vector3 targetPosition, AsteroidController aController)
     {
         aController.gameObject.SetActive(true);
+        aController.SetTargetGroupId(activeSection);
         aController.SetParticleInPosition(targetPosition);
         aController.StartLaunch(targetPosition);
     }
@@ -135,7 +154,7 @@ public class MeteorAdmin : MonoBehaviour
             {
                 SetParticleIdAndAsteroid(aController, i);
                 aController.SetID(i);
-                aController.SetLifeSpan(asteroidLifeSpan);
+                aController.SetLifeSpanAndTravelTime(asteroidLifeSpan, travelTime);
                 aController.SetDamage(damage);
             }
         }
@@ -195,8 +214,13 @@ public class MeteorAdmin : MonoBehaviour
         ToggleAsteroid(id, false);
         //ToggleParticle(id, false);
         ReturnAsteroidToSectionPosition(id);
-        GiveAsteroidNewTarget(id);
         StartCoroutine(MakeAsteroidAvailableAgain(id));
+    }
+
+    public void EraseTargetFromList(Vector3 target, int sectionId)
+    {
+        MeteorTargetKeeper tKeeper = GetMyTargetKeeper(sectionId);
+        tKeeper.EraseTargetFromList(target);
     }
 
     /*private void ToggleParticle(int id, bool isActive)
@@ -237,12 +261,12 @@ public class MeteorAdmin : MonoBehaviour
     {
         Vector3 initialPosition = initialAsteroidPositions[rHandler.GetActiveSection()];
         Debug.Log("Returning Asteroid " + astroId + " to position: " + initialPosition);
-        for (int i = 0; i< asteroids.Length; i++)
+        for (int i = 0; i < asteroids.Length; i++)
         {
             AsteroidController aController = asteroids[i];
             if (aController)
             {
-                if(aController.GetId() == astroId)
+                if (aController.GetId() == astroId)
                 {
                     aController.transform.position = initialPosition;
                 }
@@ -272,13 +296,25 @@ public class MeteorAdmin : MonoBehaviour
         for (int i = 0; i < asteroids.Length; i++)
         {
             AsteroidController aController = asteroids[i];
-            if(aController)
+            if (aController)
             {
                 if (aController.GetId() == id)
                 {
                     aController.SetAvailableAgain();
                 }
             }
+        }
+    }
+
+    public void SetNewFrequency(int numberOfLaps)
+    {
+        if(numberOfLaps <= 3)
+        {
+            asteroidsFreq -= 25;
+        }
+        else if (numberOfLaps >= 4 && numberOfLaps<=10)
+        {
+            asteroidsFreq -= 35;
         }
     }
 

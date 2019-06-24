@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
     private static int difficulty = 2;
     private static bool canDrive;
     private static UIController uiController = FindObjectOfType<UIController>();
+    private static MeteorAdmin mAdmin = FindObjectOfType<MeteorAdmin>();
     private static RaceTrackHandler trackHandler = FindObjectOfType<RaceTrackHandler>();
     private static Timer initialTimer; 
 
@@ -51,6 +52,8 @@ public class LevelManager : MonoBehaviour
 
     public static void ResetFromLastCheckPoint(GameObject _object)
     {
+        Rigidbody rBody = _object.GetComponent<Rigidbody>();
+        rBody.velocity = new Vector3(0, 0, 0);
         _object.transform.position = trackHandler.CheckpointPosition();
     }
 
@@ -64,5 +67,6 @@ public class LevelManager : MonoBehaviour
     {
         trackHandler.ResetItemsInLap();
         uiController.SetLapCounter(numberOfLaps);
+        mAdmin.SetNewFrequency(numberOfLaps);
     }
 }

@@ -21,8 +21,11 @@ public class AsteroidController : MonoBehaviour
 
     public bool isAvailable;
     private int asteroId;
+    private int targetSection;
     private bool canMove;
-    private int speedMovement = 6;
+    private float travelTime;
+    private float speedMovement;
+
     Vector3 target;
     Vector3 direction;
     Rigidbody rBody;
@@ -52,6 +55,8 @@ public class AsteroidController : MonoBehaviour
         if (canMove)
         {
             direction = target - transform.position;
+            float distance = Vector2.Distance(target, transform.position);
+            speedMovement = distance / travelTime;
             rBody.AddForce(direction.normalized * speedMovement, ForceMode.Force);
         }
     }
@@ -67,6 +72,7 @@ public class AsteroidController : MonoBehaviour
             actualLife = 0;
             canMove = false;
             ToggleParticle(false);
+            mAdmin.EraseTargetFromList(target, targetSection);
             mAdmin.TurnAsteroidAvailableForNewLaunch(asteroId);
         }
     }
@@ -76,11 +82,13 @@ public class AsteroidController : MonoBehaviour
         if (other.GetComponent<TrackPartsIdHolder>())
         {
             TrackPartsIdHolder pieceId = other.GetComponent<TrackPartsIdHolder>();
-            if (pieceId.GetId() == mAdmin.GetActiveTrackSection())
+            if (pieceId.GetId() == targetSection)
             {
                 CheckIfDamageIsDone();
+                actualLife = 0;
                 canMove = false;
                 ToggleParticle(false);
+                mAdmin.EraseTargetFromList(target, targetSection);
                 mAdmin.TurnAsteroidAvailableForNewLaunch(asteroId);
             }
 
@@ -104,7 +112,11 @@ public class AsteroidController : MonoBehaviour
 
     public void StartLaunch(Vector3 _target)
     {
-        rBody.velocity = new Vector3(0, 0, 0);
+        if(!rBody)
+        {
+            rBody = GetComponent<Rigidbody>();
+        }
+        rBody.velocity = new Vector3(0,0,0);
         target = _target;
         canMove = true;
         isAvailable = false;
@@ -131,14 +143,25 @@ public class AsteroidController : MonoBehaviour
         return asteroId;
     }
 
+    public void SetTargetGroupId(int id)
+    {
+        targetSection = id;
+    }
+
+    public int GetActiveTargetSection()
+    {
+        return targetSection;
+    }
+
     public void SetAvailableAgain()
     {
         isAvailable = true;
     }
 
-    public void SetLifeSpan(int _lifeSpan)
+    public void SetLifeSpanAndTravelTime(int _lifeSpan, float _travelTime)
     {
         lifeSpan = _lifeSpan;
+        travelTime = _travelTime;
     }
 
     public void AssignNewTarget(Vector3 newTarget)

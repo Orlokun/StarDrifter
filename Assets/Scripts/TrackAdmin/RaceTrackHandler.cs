@@ -68,6 +68,7 @@ public class RaceTrackHandler : MonoBehaviour
 
     public void SetPlayerCheckpointPosition(Vector3 position)
     {
+        position = new Vector3(position.x, position.y + 2, position.z);
         playerCheckpointPosition = position;
     }
 

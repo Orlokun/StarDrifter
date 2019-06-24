@@ -49,6 +49,13 @@ public class UIController : MonoBehaviour
 
     #endregion
 
+    public void RestartToCheckpoint()
+    {
+        CarController player = FindObjectOfType<CarController>();
+        LevelManager.ResetFromLastCheckPoint(player.gameObject);
+    }
+
+
     #region Timers
     void SetRunTimerOnOff(bool turnOn)
     {
