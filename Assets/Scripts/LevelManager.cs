@@ -1,15 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    private static int difficulty = 2;
+    private static LevelManager lManagerInstace;
+
+    private static int difficulty;
     private static bool canDrive;
     private static UIController uiController = FindObjectOfType<UIController>();
     private static MeteorAdmin mAdmin = FindObjectOfType<MeteorAdmin>();
     private static RaceTrackHandler trackHandler = FindObjectOfType<RaceTrackHandler>();
-    private static Timer initialTimer; 
+    private static Timer initialTimer;
+    private static int starTime;
+
+    private void Awake()
+    {
+        if(lManagerInstace == null)
+        {
+            lManagerInstace = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     public static void SetDifficulty(int incomingDif)
     {
@@ -26,6 +43,7 @@ public class LevelManager : MonoBehaviour
         SetCanDrive(true);
         uiController.UiElementSwitch("initialTimer", false);
         uiController.UiElementSwitch("runTimer", true);
+        initialTimer.SetTimer(starTime);
     }
 
     public static void SetCanDrive(bool _canDrive)
@@ -50,17 +68,28 @@ public class LevelManager : MonoBehaviour
         initialTimer = _timer;
     }
 
+    public static int GetMainTimerTime()
+    {
+        return starTime;
+    }
+
     public static void ResetFromLastCheckPoint(GameObject _object)
     {
         Rigidbody rBody = _object.GetComponent<Rigidbody>();
         rBody.velocity = new Vector3(0, 0, 0);
+        rBody.rotation = new Quaternion(0, 0, 0, 1);
         _object.transform.position = trackHandler.CheckpointPosition();
     }
 
     public static void ChangeTimer(float timeLap)
     {
         Timer rTimer = uiController.GetTimer("runTimer");
-        rTimer.ChangeTimer(timeLap);
+        rTimer.AddToTimer(timeLap);
+    }
+
+    public static void SetInitialTimeAmount(int _time)
+    {
+        starTime = _time;
     }
 
     public static void SetNewLap(int numberOfLaps)
@@ -68,5 +97,35 @@ public class LevelManager : MonoBehaviour
         trackHandler.ResetItemsInLap();
         uiController.SetLapCounter(numberOfLaps);
         mAdmin.SetNewFrequency(numberOfLaps);
+    }
+
+    public static void LoadNextScene(int actualScene)
+    {
+        int sceneToLoad = actualScene + 1;
+        SceneManager.LoadScene(sceneToLoad);
+    }
+
+    public static void YouLoose()
+    {
+        canDrive = false;
+        Debug.Log("YOU LOOSE");
+        trackHandler.Restart();
+
+    }
+
+
+    public static void SetRaceTrackHandler(RaceTrackHandler rHandler)
+    {
+        trackHandler = rHandler;
+    }
+
+    public static void SetMeteorAdmin(MeteorAdmin _mAdmin)
+    {
+        mAdmin = _mAdmin;
+    }
+
+    public static void SetUIController(UIController _uIController)
+    {
+        uiController = _uIController;
     }
 }

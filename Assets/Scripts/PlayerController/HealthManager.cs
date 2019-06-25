@@ -72,11 +72,19 @@ public class HealthManager : MonoBehaviour
 
     }
 
-    public void ChangeHP(GameObject dReceiver, int deltaDamage)
+    public void GiveDamage(GameObject dReceiver, int deltaDamage)
     {
         if (dReceiver.GetComponent<CarController>() || dReceiver.GetComponent<AsteroidController>())
         {
             hBar.TakeHit(deltaDamage);
+        }
+    }
+
+    public void AddHealth(GameObject dReceiver, int health)
+    {
+        if (dReceiver.GetComponent<CarController>())
+        {
+            hBar.GiveHealth(health);
         }
     }
 }

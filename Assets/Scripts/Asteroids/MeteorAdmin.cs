@@ -27,6 +27,7 @@ public class MeteorAdmin : MonoBehaviour
         rHandler = FindObjectOfType<RaceTrackHandler>();
         asteroids = FindObjectsOfType<AsteroidController>();
         alertParticles = FindObjectsOfType<AsteroidPromptParticle>();
+        LevelManager.SetMeteorAdmin(this);
         SetAsteroidParameters();
         GetAsteroidsPlaceHoldersPosition();
         SetDamageRatio();

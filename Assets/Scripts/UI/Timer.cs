@@ -7,7 +7,7 @@ using TMPro;
 public class Timer : MonoBehaviour
 {
     private TextMeshProUGUI text;
-    [SerializeField] private float mainTimer;
+
     public enum TimerType
     {
         RunTimer, InitialTimer
@@ -26,8 +26,10 @@ public class Timer : MonoBehaviour
         {
             case TimerType.InitialTimer:                //Le mando el timer inicial al level manager para 
                 LevelManager.SetInitialTimer(this);
+                timer = 3f;
                 break;
             case TimerType.RunTimer:
+                timer = LevelManager.GetMainTimerTime();
                 break;
             default:
                 break;
@@ -37,7 +39,6 @@ public class Timer : MonoBehaviour
     private void Start()
     {
         text = GetComponent<TextMeshProUGUI>();
-        timer = mainTimer;
         text.text = timer.ToString() + ".00";
         CheckTimerColor();
     }
@@ -119,12 +120,17 @@ public class Timer : MonoBehaviour
 
     void GameOver()
     {
-        Debug.Log("You Loose");
+        LevelManager.YouLoose();
     }
 
-    public void ChangeTimer(float deltaTime)
+    public void AddToTimer(float deltaTime)
     {
         timer += deltaTime;
+    }
+
+    public void SetTimer(float incomingTime)
+    {
+        timer = incomingTime;
     }
 
     public void SetCanCount(bool _canCount)
@@ -132,4 +138,6 @@ public class Timer : MonoBehaviour
         canCount = _canCount;
 
     }
+
+
 }

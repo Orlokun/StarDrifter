@@ -29,6 +29,17 @@ public class HealthBar : MonoBehaviour
         currentHealth -= incomingDamage;
         Debug.Log("Current Health is: " + currentHealth);
         slider.value = hManager.CalculateHealthBar(currentHealth, maxHealth);
+        if(currentHealth <= 0)
+        {
+            LevelManager.YouLoose();
+        }
+    }
+
+    public void GiveHealth(int incomingHealth)
+    {
+        currentHealth += incomingHealth;
+        Debug.Log("Current Health is: " + currentHealth);
+        slider.value = hManager.CalculateHealthBar(currentHealth, maxHealth);
     }
 
 

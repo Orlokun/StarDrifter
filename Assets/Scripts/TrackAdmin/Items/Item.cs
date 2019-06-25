@@ -27,6 +27,11 @@ public class Item : MonoBehaviour
 
     }
 
+    protected virtual void ActivateItem(GameObject other)
+    {
+
+    }
+
     protected virtual void DeactivateMySelf()
     {
         trackHandler.SetItemActive(this, false);

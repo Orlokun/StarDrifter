@@ -36,6 +36,6 @@ public class HitAdmin : MonoBehaviour
 
     private void TakeHit(GameObject player, int damage)
     {
-        hManager.ChangeHP(player, damage);
+        hManager.GiveDamage(player, damage);
     }
 }

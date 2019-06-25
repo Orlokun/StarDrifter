@@ -19,6 +19,7 @@ public class UIController : MonoBehaviour
     {
         DefineTimers();
         SetStartConditions();
+        LevelManager.SetUIController(this);
     }
 
     void SetStartConditions()

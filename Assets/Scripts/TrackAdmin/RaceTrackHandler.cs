@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RaceTrackHandler : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class RaceTrackHandler : MonoBehaviour
         GetTracks();
         GetItems();
         playerCheckpointPosition = FindObjectOfType<CarController>().transform.position;
+        LevelManager.SetRaceTrackHandler(this);
         StartCoroutine(LevelManager.TurnInitialTimerOn());
     }
 
@@ -64,6 +66,19 @@ public class RaceTrackHandler : MonoBehaviour
             activeSectionId = _activeSection;
             Debug.Log("Active Section is: " + activeSectionId);
         }
+    }
+
+    public void Restart()
+    {
+        StartCoroutine(Restarting());
+    }
+
+    private IEnumerator Restarting()
+    {
+        yield return new WaitForSeconds(3);
+        Scene scene = SceneManager.GetActiveScene();
+        int actualScene = scene.buildIndex;
+        SceneManager.LoadScene(actualScene);
     }
 
     public void SetPlayerCheckpointPosition(Vector3 position)

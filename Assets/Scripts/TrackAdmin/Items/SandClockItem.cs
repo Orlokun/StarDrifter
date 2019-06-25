@@ -15,6 +15,6 @@ public class SandClockItem : Item
     {
         base.ActivateItem();
         Timer rTimer = uiController.GetTimer("runTimer");
-        rTimer.ChangeTimer(timeToAdd);
+        rTimer.AddToTimer(timeToAdd);
     }
 }
