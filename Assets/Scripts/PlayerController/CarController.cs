@@ -10,8 +10,6 @@ public class CarController : MonoBehaviour
     public float centerOfMassY;
     private bool hitState;
 
-
-
     public WheelCollider[] frontWheels = new WheelCollider[2];
     public WheelCollider[] rearWheels = new WheelCollider[2];
 
@@ -29,10 +27,13 @@ public class CarController : MonoBehaviour
     private float motorForce;
     public float topSpeed;
 
+    AudioSource aSource;
 
     private void Awake()
     {
         iController = FindObjectOfType<InputController>();
+        LevelManager.SetCarController(this);
+        TurnAudioOn();
         rBody = GetComponent<Rigidbody>();
         rBody.centerOfMass = new Vector3(rBody.centerOfMass.x, centerOfMassY, rBody.centerOfMass.z);
     }
@@ -96,6 +97,15 @@ public class CarController : MonoBehaviour
         wCollider.GetWorldPose(out position, out myQuaternion);
         _transform.position = position;
         _transform.rotation = myQuaternion;
+    }
+
+    private void TurnAudioOn()
+    {
+        aSource = GetComponent<AudioSource>();
+        if (aSource)
+        {
+            aSource.volume = 1;
+        }
     }
 
     public void SetHit(bool _setHit)

@@ -12,6 +12,7 @@ public class LevelManager : MonoBehaviour
     private static UIController uiController = FindObjectOfType<UIController>();
     private static MeteorAdmin mAdmin = FindObjectOfType<MeteorAdmin>();
     private static RaceTrackHandler trackHandler = FindObjectOfType<RaceTrackHandler>();
+    private static CarController cController = FindObjectOfType<CarController>();
     private static Timer initialTimer;
     private static int starTime;
 
@@ -108,12 +109,23 @@ public class LevelManager : MonoBehaviour
     public static void YouLoose()
     {
         canDrive = false;
+        TurnAudioOff();
         Debug.Log("YOU LOOSE");
         trackHandler.Restart();
-
     }
 
-
+    private static void TurnAudioOff()
+    {
+        if (cController.GetComponent<AudioSource>())
+        {
+            AudioSource aSource = cController.GetComponent<AudioSource>();
+            int fadeTime = 100;
+            for (int i =0; i<fadeTime; i++)
+            {
+                aSource.volume -= aSource.volume / fadeTime;
+            }
+        }
+    }
     public static void SetRaceTrackHandler(RaceTrackHandler rHandler)
     {
         trackHandler = rHandler;
@@ -127,5 +139,10 @@ public class LevelManager : MonoBehaviour
     public static void SetUIController(UIController _uIController)
     {
         uiController = _uIController;
+    }
+
+    public static void SetCarController(CarController _cController)
+    {
+        cController = _cController;
     }
 }

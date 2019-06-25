@@ -62,7 +62,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\AsteroidPromptParticle.cs" />
     <Compile Include="Assets\ExternalPackages\Gems Ultimate Pack\Scripts\AnimationScript.cs" />
     <Compile Include="Assets\ExternalPackages\JMO Assets\Cartoon FX\Demo\Assets\CFX_AutoStopLoopedEffect.cs" />
     <Compile Include="Assets\ExternalPackages\JMO Assets\Cartoon FX\Demo\Assets\CFX_Demo_New.cs" />
@@ -74,13 +73,14 @@
     <Compile Include="Assets\ExternalPackages\JMO Assets\Cartoon FX\Scripts\CFX_AutoRotate.cs" />
     <Compile Include="Assets\ExternalPackages\JMO Assets\Cartoon FX\Scripts\CFX_LightFlicker.cs" />
     <Compile Include="Assets\ExternalPackages\JMO Assets\Cartoon FX\Scripts\CFX_LightIntensityFade.cs" />
-    <Compile Include="Assets\MenuManager.cs" />
     <Compile Include="Assets\Scripts\Asteroids\AsteroidController.cs" />
+    <Compile Include="Assets\Scripts\Asteroids\AsteroidPromptParticle.cs" />
     <Compile Include="Assets\Scripts\Asteroids\AsteroidsPlaceHolder.cs" />
     <Compile Include="Assets\Scripts\Asteroids\MeteorAdmin.cs" />
     <Compile Include="Assets\Scripts\Asteroids\MeteorTargetKeeper.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
     <Compile Include="Assets\Scripts\MainMenu\Login.cs" />
+    <Compile Include="Assets\Scripts\MainMenu\MenuManager.cs" />
     <Compile Include="Assets\Scripts\MainMenu\Register.cs" />
     <Compile Include="Assets\Scripts\PlayerController\CameraController.cs" />
     <Compile Include="Assets\Scripts\PlayerController\CarController.cs" />
