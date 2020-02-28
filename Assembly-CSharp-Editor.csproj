@@ -68,6 +68,41 @@
     <Compile Include="Assets\Allegorithmic\Plugins\Substance\Livelink\Editor\Scripts\MaterialsManipulation.cs" />
     <Compile Include="Assets\Allegorithmic\Plugins\Substance\Livelink\Editor\Scripts\MeshLinkEditor.cs" />
     <Compile Include="Assets\Allegorithmic\Plugins\Substance\Livelink\Editor\Scripts\ShadersInfos.cs" />
+    <Compile Include="Assets\CyberCar\Editor\SettingsPrompt.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Attributes\PostProcessingModelEditorAttribute.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\AmbientOcclusionModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\AntialiasingModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\BloomModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\BuiltinDebugViewsEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\ChromaticAberrationEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\ColorGradingModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\DefaultPostFxModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\DepthOfFieldModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\DitheringModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\EyeAdaptationModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\FogModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\GrainModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\MotionBlurModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\ScreenSpaceReflectionModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\UserLutModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Models\VignetteModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Monitors\HistogramMonitor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Monitors\ParadeMonitor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Monitors\VectorscopeMonitor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Monitors\WaveformMonitor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\PostProcessingBehaviourEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\PostProcessingFactory.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\PostProcessingInspector.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\PostProcessingModelEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\PostProcessingMonitor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\PropertyDrawers\GetSetDrawer.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\PropertyDrawers\MinDrawer.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\PropertyDrawers\TrackballGroupDrawer.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Utils\CurveEditor.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Utils\EditorGUIHelper.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Utils\EditorResources.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Utils\FxStyles.cs" />
+    <Compile Include="Assets\CyberCar\PostProcessing\Editor\Utils\ReflectionUtils.cs" />
     <Compile Include="Assets\ExternalPackages\JMO Assets\Cartoon FX Easy Editor\Editor\CFXEasyEditor.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/oguer/Documents/GitHub/StarDrifter/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
@@ -304,7 +339,7 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.1f1/Editor/Data/PlaybackEngines/MetroSupport/UnityEditor.UWP.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
-      <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
+      <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/2015/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="Substance.Game">
       <HintPath>C:/Users/oguer/Documents/GitHub/StarDrifter/Assets/Allegorithmic/Plugins/Substance.Game.dll</HintPath>

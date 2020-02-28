@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
+    public ScrWheel[] wheel;
+
+    [Header ("CarSpecs")]
+    public float wheelBase;    //in mts
+    public float rearTrack;    //in mts
+    public float turnRadius;   //in mts
+
+    [Header("Inputs")]
+    public float steerInput;
+    private float ackermannAngleLeft;
+    private float ackermannAngleRight;
+
+
+
+
     private InputController iController;
     private Vector3 wasdController;
     private Rigidbody rBody;
@@ -31,23 +46,27 @@ public class CarController : MonoBehaviour
 
     private void Awake()
     {
-        iController = FindObjectOfType<InputController>();
-        LevelManager.SetCarController(this);
-        TurnAudioOn();
-        rBody = GetComponent<Rigidbody>();
-        rBody.centerOfMass = new Vector3(rBody.centerOfMass.x, centerOfMassY, rBody.centerOfMass.z);
+
     }
 
     private void FixedUpdate()
     {
-        if(LevelManager.CanDrive())
+        steerInput = Input.GetAxis("Horizontal");
+        if (steerInput > 0) //Turning Right
         {
-            wasdController = iController.GetInput();
-            SetSteerAngleFromSpeedAndInput();
-            SetWheelSteerAngle(currentSteerAngle);
-            Accelerate();
+            ackermannAngleLeft = Mathf.Rad2Deg * Mathf.Atan(wheelBase / turnRadius + (rearTrack / 2));
+            ackermannAngleRight = Mathf.Rad2Deg * Mathf.Atan(wheelBase / turnRadius - (rearTrack / 2));
         }
-        UpdateWheelStates();
+        else if(steerInput < 0) //Turning Rigth
+        {
+            ackermannAngleLeft = Mathf.Rad2Deg * Mathf.Atan(wheelBase / turnRadius - (rearTrack / 2));
+            ackermannAngleRight = Mathf.Rad2Deg * Mathf.Atan(wheelBase / turnRadius + (rearTrack / 2));
+        }
+        else
+        {
+            ackermannAngleRight = 0;
+            ackermannAngleLeft = 0;
+        }
     }
 
     private void SetSteerAngleFromSpeedAndInput()
